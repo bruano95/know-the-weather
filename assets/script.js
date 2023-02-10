@@ -8,6 +8,8 @@ var cityInput = document.getElementById('city-input');
 var searchbtn = document.getElementById('searchbtn');
 var timeEl =document.getElementById('time');
 var dateEl =document.getElementById('date');
+var searchHistory =document.querySelector("#search-history-list");
+var searchForm = document.querySelector('#user-form');
 
 //fetching the data from the openweathermap API
 function fetchWeather(event){
@@ -55,31 +57,31 @@ function fetchForecast (event){
 
 //five day forcasts data input to html
 var showForecastData = function(data){
-    $('card-date-three').html(data.list[0].dt_txt);
+    $('.card-date-one').text(data.list[0].dt_txt);
     $('.temp-day-one').text("Temperature: " + data.list[0].main.temp + "°F");
     $('.humidity-day-one').text("Humidity: " + data.list[0].main.humidity + "%");
     $('.wind-day-one').text("Wind Speed: " + data.list[0].wind.speed + "km/h");
     $('.weatherIconDay').html("<img src='https://openweathermap.org/img/w/" + data.list[0].weather[0].icon + ".png'>");
 
-    $('card-date-three').html(data.list[0].dt_txt);
+    $('.card-date-two').text(data.list[7].dt_txt);
     $('.temp-day-two').text("Temperature: " + data.list[7].main.temp + "°F");
     $('.humidity-day-two').text("Humidity: " + data.list[7].main.humidity + "%");
     $('.wind-day-two').text("Wind Speed: " + data.list[7].wind.speed + "km/h");
     $('.weatherIconDay').html("<img src='https://openweathermap.org/img/w/" + data.list[7].weather[0].icon + ".png'>");
 
-    $('card-date-three').html(data.list[0].dt_txt);
+    $('.card-date-three').text(data.list[15].dt_txt);
     $('.temp-day-three').text("Temperature: " + data.list[15].main.temp + "°F");
     $('.humidity-day-three').text("Humidity: " + data.list[15].main.humidity + "%");
     $('.wind-day-three').text("Wind Speed: " + data.list[15].wind.speed + "km/h");
     $('.weatherIconDay').html("<img src='https://openweathermap.org/img/w/" + data.list[15].weather[0].icon + ".png'>");
 
-    $('card-date-three').html(data.list[0].dt_txt);
+    $('.card-date-four').text(data.list[23].dt_txt);
     $('.temp-day-four').text("Temperature: " + data.list[23].main.temp + "°F");
     $('.humidity-day-four').text("Humidity: " + data.list[23].main.humidity + "%");
     $('.wind-day-four').text("Wind Speed: " + data.list[23].wind.speed + "km/h");
     $('.weatherIconDay').html("<img src='https://openweathermap.org/img/w/" + data.list[23].weather[0].icon + ".png'>");
 
-    $('card-date-three').html(data.list[0].dt_txt);
+    $('.card-date-five').text(data.list[31].dt_txt);
     $('.temp-day-five').text("Temperature: " + data.list[31].main.temp + "°F");
     $('.humidity-day-five').text("Humidity: " + data.list[31].main.humidity + "%");
     $('.wind-day-five').text("Wind Speed: " + data.list[31].wind.speed + "km/h");
@@ -94,6 +96,50 @@ searchbtn.addEventListener('click',function(event){
 
 function searchHistory(){
     var lastSearched = []
-    lastSearched.push($('#searchbtn')).valueOf();
-    $each(lastSearched, fucntion(index, value))
+    searchHistory.innerHTML = "";
+    todoCountSpan.textContent = lastSearched.length;
+
+    for (var i = 0; i < lastSearched.length; i++) {
+      var search = lastSearched[i];
+  
+      var li = document.createElement("li");
+      li.textContent = search;
+      li.setAttribute("data-index", i);
+  
+      var button = document.createElement("button");
+      button.textContent = "Complete ✔️";
+  
+      li.appendChild(button);
+      searchHistory.appendChild(li);
+    }
 }
+
+function init() {
+    var storedSearches = JSON.parse(localStorage.getItem("lastSearched"));
+
+    if (storedSearches !== null) {
+        lastSearched = storedSearches;
+    }
+
+    searchHistory();
+}
+
+function storeHistory() {
+    localStorage.setItem("lastSearched", JSON.stringify(lastSearched));
+}
+
+searchForm.addEventListener("submit", function(event){
+    event.preventDefault();
+
+    var searchInput = cityInput.value.trim();
+
+    if (searchInput === "") {
+        return;
+    }
+
+    lastSearched.push(searchInput);
+    cityInput.value = "";
+
+    storeHistory();
+    searchHistory();
+})
