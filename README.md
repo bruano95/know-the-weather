@@ -2,10 +2,12 @@
 An app that allows users to search for the current 5-day weather forecast for different cities.
 
 ## Description
-The link to this project:
+The link to this project: https://bruano95.github.io/know-the-weather/
 
 This project is built to allow users to search by city to view the current and upcoming weather information. After the user searches by city the current temperature, conditions, wind speeds, and humidity are displayed under the time and date. Under this information, a five-day forecast is displayed. The five-day forecasts displays the same metrics for the specific day. On each of the listed days, a icon representing the current conditions is displayed. After the user searches, their search history is listed under the search bar. All weather metric were gathered through the public openweathermap API.
 
+<img src=assets/images/Weather-app1.png>
+<img src=assets/images/Weather-App2.png>
 
 # Getting Started
 
