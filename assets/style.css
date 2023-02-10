@@ -1,0 +1,51 @@
+:root {
+    --primary: #000000;
+    --secondary: white;
+    --tertiary: #788585;
+    --light-dark: #6f6866;
+    --light: rgb(173, 199, 230);
+    --border-radius: 0.3rem;
+}
+
+body {
+    background-image: url(../assets/images/blue-background.png);
+    margin: 0;
+    padding: 0;
+    color: var(--light);
+    line-height: 1.5;
+    font-size: 16px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}  
+.hero {
+    padding: 1% 25%;
+    margin-bottom: 5rem;
+    color: var(--primary);
+    display: flex;
+    justify-content: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.main-card,
+.searchside {
+    color: var(--primary);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.five-day {
+    bottom: 0;
+    flex-direction: column;
+    display: flex;
+    color:white;
+}
+
+.searchbtn {
+    border: 1px solid grey;
+    border-radius: 5px;
+    box-shadow: 2px 2px var(--light-dark);
+}
+
+.searchbtn:hover {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
