@@ -38,13 +38,15 @@ body {
     color:white;
 }
 
-.searchbtn {
+.searchbtn,
+.clearbtn {
     border: 1px solid grey;
     border-radius: 5px;
     box-shadow: 2px 2px var(--light-dark);
 }
 
-.searchbtn:hover {
+.searchbtn:hover,
+.clearbtn:hover {
     background-color: var(--primary);
     color: var(--light);
 }

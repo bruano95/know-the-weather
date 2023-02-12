@@ -6,15 +6,17 @@ $('#currentDay').text(todaysDate);
 var apiKey = '4bcdb09905036742ab7b420bef55670d';
 var cityInput = document.getElementById('city-input');
 var searchbtn = document.getElementById('searchbtn');
+var clearbtn = document.getElementById('clearbtn');
 var timeEl =document.getElementById('time');
 var dateEl =document.getElementById('date');
 var searchHistory =document.querySelector("#search-history-list");
 var searchForm = document.querySelector('#user-form');
 
 //fetching the data from the openweathermap API
-function fetchWeather(event){
+function fetchWeather(event, cityName){
     event.preventDefault();
-    var cityName = cityInput.value
+
+    storeHistory(cityName)
     console.log(cityName);
     var requestUrl = "https://api.openweathermap.org/data/2.5/weather?q="+ cityName +"&appid=4bcdb09905036742ab7b420bef55670d&units=imperial"
     fetch(requestUrl)
@@ -41,9 +43,9 @@ var showCurrentWeather = function(data){
 
 //five-day forecast data
 
-function fetchForecast (event){
+function fetchForecast (event, cityName){
     event.preventDefault();
-    var cityName = cityInput.value
+
     var requestForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=4bcdb09905036742ab7b420bef55670d&units=imperial"
     fetch(requestForecastUrl)
         .then(function (response) {
@@ -90,56 +92,49 @@ var showForecastData = function(data){
 
 //allows for the search button to work on click
 searchbtn.addEventListener('click',function(event){
-    fetchWeather(event)
-    fetchForecast(event)
+    var cityName = cityInput.value
+    fetchWeather(event, cityName)
+    fetchForecast(event, cityName)
 });
 
-function searchHistory(){
-    var lastSearched = []
-    searchHistory.innerHTML = "";
-    todoCountSpan.textContent = lastSearched.length;
-
-    for (var i = 0; i < lastSearched.length; i++) {
-      var search = lastSearched[i];
-  
-      var li = document.createElement("li");
-      li.textContent = search;
-      li.setAttribute("data-index", i);
-  
-      var button = document.createElement("button");
-      button.textContent = "Complete ✔️";
-  
-      li.appendChild(button);
-      searchHistory.appendChild(li);
-    }
-}
-
-function init() {
+function getSearchHistory(){
+    searchHistory.innerHTML = ""
     var storedSearches = JSON.parse(localStorage.getItem("lastSearched"));
-
-    if (storedSearches !== null) {
-        lastSearched = storedSearches;
+    if(storedSearches !== null){
+        for(let i = 0; i < storedSearches.length; i++){
+            let historyDiv = document.createElement('div')
+            let historyButtons = document.createElement("button")
+            historyButtons.innerHTML = storedSearches[i]
+            historyButtons.addEventListener('click', function(event){
+                event.preventDefault();
+                let cityName = event.target.innerHTML;
+                fetchWeather(event, cityName)
+                fetchForecast(event, cityName)
+            })
+            historyDiv.append(historyButtons)
+            searchHistory.append(historyDiv)
+        }
     }
-
-    searchHistory();
 }
 
-function storeHistory() {
-    localStorage.setItem("lastSearched", JSON.stringify(lastSearched));
+function storeHistory(cityName) {
+    var storedSearches = JSON.parse(localStorage.getItem("lastSearched"));
+    if(storedSearches === null){
+        storedSearches = [];
+        storedSearches.push(cityName);
+    } else {
+        let filteredData = storedSearches.filter(searchHistory => searchHistory.toLowerCase() === cityName.toLowerCase())
+        if(filteredData.length === 0){
+            storedSearches.push(cityName)
+        }
+    }
+    localStorage.setItem("lastSearched", JSON.stringify(storedSearches));
+    getSearchHistory()
 }
 
-searchForm.addEventListener("submit", function(event){
+clearbtn.addEventListener('click', function(event){
     event.preventDefault();
-
-    var searchInput = cityInput.value.trim();
-
-    if (searchInput === "") {
-        return;
-    }
-
-    lastSearched.push(searchInput);
-    cityInput.value = "";
-
-    storeHistory();
-    searchHistory();
+    localStorage.removeItem('lastSearched')
+    getSearchHistory()
 })
+getSearchHistory()
